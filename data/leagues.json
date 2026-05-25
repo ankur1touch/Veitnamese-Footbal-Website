@@ -1,0 +1,9 @@
+[
+  { "id": 340, "key": "vleague", "name": "V.League 1", "country": "Vietnam", "season": 2025 },
+  { "id": 39, "key": "epl", "name": "Premier League", "country": "England", "season": 2024 },
+  { "id": 2, "key": "ucl", "name": "Champions League", "country": "World", "season": 2024 },
+  { "id": 140, "key": "laliga", "name": "La Liga", "country": "Spain", "season": 2024 },
+  { "id": 78, "key": "bundesliga", "name": "Bundesliga", "country": "Germany", "season": 2024 },
+  { "id": 135, "key": "seriea", "name": "Serie A", "country": "Italy", "season": 2024 },
+  { "id": 1, "key": "worldcup", "name": "FIFA World Cup 2026", "country": "World", "season": 2026 }
+]

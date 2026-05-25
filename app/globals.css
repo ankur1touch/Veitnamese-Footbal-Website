@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 245 245 245;
+  --foreground: 13 27 42;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: rgb(var(--background));
+  color: rgb(var(--foreground));
+  font-family: var(--font-body), system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+}
+
+@layer components {
+  .container-fh {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  /* BóngĐáHôm design tokens — distinct from FútHoy */
+  .bdh-section-title {
+    @apply font-display text-lg font-extrabold text-brand-navy sm:text-xl;
+  }
+
+  .bdh-section-title::before {
+    content: '';
+    @apply mr-2 inline-block h-5 w-1 rounded-full bg-brand-red align-middle;
+  }
+
+  .bdh-card-dark {
+    @apply rounded-2xl bg-brand-navy text-white overflow-hidden;
+  }
+
+  .bdh-card-light {
+    @apply rounded-2xl border border-brand-border bg-brand-card overflow-hidden;
+  }
+
+  .bdh-accent-border {
+    @apply border-l-4 border-brand-red pl-4;
+  }
+
+  .tag-pill {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white;
+  }
+
+  .ticker-track {
+    @apply flex w-max gap-8 whitespace-nowrap;
+    animation: ticker 45s linear infinite;
+  }
+
+  .ticker-track:hover {
+    animation-play-state: paused;
+  }
+
+  .news-scroll-track {
+    @apply flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory;
+    scrollbar-width: thin;
+    scrollbar-color: #D32F2F transparent;
+  }
+
+  .news-scroll-track::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .news-scroll-track::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-brand-red/40;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+}
+
+@keyframes ticker {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}

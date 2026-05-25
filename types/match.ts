@@ -1,0 +1,24 @@
+export type MatchStatus =
+  | 'SCHEDULED'
+  | 'LIVE'
+  | 'IN_PLAY'
+  | 'PAUSED'
+  | 'FINISHED'
+  | 'FT'
+  | 'HT';
+
+export interface LiveMatch {
+  id: number;
+  competition: string;
+  homeTeam: string;
+  awayTeam: string;
+  homeTeamId?: number;
+  awayTeamId?: number;
+  homeCrest?: string;
+  awayCrest?: string;
+  homeScore: number | null;
+  awayScore: number | null;
+  status: MatchStatus;
+  minute?: string;
+  utcDate: string;
+}

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 48" fill="none">
+  <defs>
+    <linearGradient id="shield-bg" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D32F2F"/>
+      <stop offset="1" stop-color="#B71C1C"/>
+    </linearGradient>
+    <linearGradient id="gold-star" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#FFD54F"/>
+      <stop offset="1" stop-color="#F9A825"/>
+    </linearGradient>
+  </defs>
+  <!-- Shield icon -->
+  <path d="M24 2L42 8V22C42 32.5 34 40.5 24 44C14 40.5 6 32.5 6 22V8L24 2Z" fill="url(#shield-bg)"/>
+  <path d="M24 2L42 8V22C42 32.5 34 40.5 24 44C14 40.5 6 32.5 6 22V8L24 2Z" stroke="#F9A825" stroke-width="1.5" fill="none" opacity="0.6"/>
+  <!-- Football -->
+  <circle cx="24" cy="24" r="10" fill="white" opacity="0.95"/>
+  <path d="M24 16L27 20H21L24 16Z" fill="#D32F2F"/>
+  <path d="M21 20L24 24L18 24L21 20Z" fill="#D32F2F"/>
+  <path d="M27 20L30 24L24 24L27 20Z" fill="#D32F2F"/>
+  <path d="M18 24L21 28L24 24L18 24Z" fill="#D32F2F"/>
+  <path d="M30 24L27 28L24 24L30 24Z" fill="#D32F2F"/>
+  <path d="M21 28L24 32L27 28H21Z" fill="#D32F2F"/>
+  <!-- Star accent -->
+  <path d="M38 6L39 9L42 9L39.5 11L40.5 14L38 12L35.5 14L36.5 11L34 9L37 9L38 6Z" fill="url(#gold-star)"/>
+  <!-- Wordmark -->
+  <text x="52" y="22" font-family="Georgia, serif" font-size="18" font-weight="800" fill="#0D1B2A">B�ng</text>
+  <text x="92" y="22" font-family="Georgia, serif" font-size="18" font-weight="800" fill="#F9A825">�</text>
+  <text x="118" y="22" font-family="Georgia, serif" font-size="18" font-weight="800" fill="#0D1B2A">H�m</text>
+  <text x="52" y="38" font-family="system-ui, sans-serif" font-size="9" font-weight="600" fill="#64748B" letter-spacing="2">FOOTBALL NEWS DAILY</text>
+</svg>
