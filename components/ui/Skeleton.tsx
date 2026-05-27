@@ -50,4 +50,29 @@ export function SkeletonList({ count = 4, className, itemClassName, withImage = 
   );
 }
 
+export function SkeletonHero() {
+  return (
+    <div className="hero-gradient animate-pulse">
+      <div className="container-fh py-10 sm:py-14">
+        <Skeleton className="mb-4 h-6 w-32 bg-white/20" />
+        <Skeleton className="mb-3 h-12 w-3/4 max-w-xl bg-white/20" />
+        <Skeleton className="mb-6 h-5 w-1/2 max-w-md bg-white/15" />
+        <Skeleton className="h-10 w-36 rounded-full bg-white/20" />
+      </div>
+    </div>
+  );
+}
+
+export function SkeletonTicker() {
+  return (
+    <div className="border-y border-brand-border bg-white py-2">
+      <div className="container-fh flex gap-3 overflow-hidden">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <Skeleton key={i} className="h-10 w-44 shrink-0 rounded-full" />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default Skeleton;

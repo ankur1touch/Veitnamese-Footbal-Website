@@ -38,7 +38,6 @@ const FEED_SOURCES: FeedSource[] = [
   { name: 'BBC Sport', url: 'https://feeds.bbci.co.uk/sport/football/rss.xml', homepage: 'https://www.bbc.co.uk/sport/football', defaultTag: 'Premier League', lang: 'en' },
   { name: 'Sky Sports', url: 'https://www.skysports.com/rss/11095', homepage: 'https://www.skysports.com/football', defaultTag: 'Premier League', lang: 'en' },
   { name: 'ESPN FC', url: 'https://www.espn.com/espn/rss/soccer/news', homepage: 'https://www.espn.com/soccer/', defaultTag: 'Premier League', lang: 'en' },
-  { name: 'FIFA', url: 'https://www.fifa.com/rss-feeds/news', homepage: 'https://www.fifa.com', defaultTag: 'World Cup', lang: 'en' },
   { name: '90min', url: 'https://www.90min.com/posts.rss', homepage: 'https://www.90min.com', defaultTag: 'Premier League', lang: 'en' },
   { name: 'World Soccer', url: 'https://www.worldsoccer.com/feed', homepage: 'https://www.worldsoccer.com', defaultTag: 'World Cup', lang: 'en' },
   { name: 'Google News VN', url: 'https://news.google.com/rss/search?q=b%C3%B3ng+%C4%91%C3%A1&hl=vi&gl=VN&ceid=VN:vi', homepage: 'https://news.google.com', defaultTag: 'V.League', lang: 'vi' },

@@ -4,9 +4,13 @@ frontend:
     preBuild:
       commands:
         - nvm use 20
+        - node -v
         - npm ci
     build:
       commands:
+        # SSR runtime: expose Amplify env vars to Next.js server components/API routes
+        - env | grep -E '^(FOOTBALL_|NEXT_PUBLIC_)' >> .env.production || true
+        - export NODE_OPTIONS="--max-old-space-size=4096"
         - npm run build
   artifacts:
     baseDirectory: .next

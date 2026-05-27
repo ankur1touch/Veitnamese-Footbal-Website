@@ -6,7 +6,6 @@ import { Link } from '@/i18n/navigation';
 import { ArrowRight } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { fetchNews } from '@/store/features/newsSlice';
-import { HeroCard } from './HeroCard';
 import { HeadlineItem } from './HeadlineItem';
 import { NewsCard } from './NewsCard';
 import { SkeletonCard, Skeleton } from '@/components/ui/Skeleton';
@@ -25,21 +24,18 @@ export function HomeNewsClient() {
     }
   }, [dispatch, status]);
 
-  const { hero, headlines, scrollNews, moreNews } = useMemo(() => {
-    const heroPick = articles.find((n) => n.exclusive) ?? articles[0];
-    const rest = articles.filter((n) => n.id !== heroPick?.id);
-    const headlines = rest.slice(0, 5);
-    const scrollNews = rest.slice(5, 13);
-    const moreNews = rest.slice(13, 21);
-    return { hero: heroPick, headlines, scrollNews, moreNews };
+  const { headlines, scrollNews, moreNews } = useMemo(() => {
+    const headlines = articles.slice(0, 5);
+    const scrollNews = articles.slice(5, 13);
+    const moreNews = articles.slice(13, 21);
+    return { headlines, scrollNews, moreNews };
   }, [articles]);
 
   if (status === 'loading' && articles.length === 0) {
     return (
       <div className="space-y-6">
-        <Skeleton className="aspect-[16/9] w-full rounded-2xl" />
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-          <SkeletonCard />
+        <Skeleton className="h-48 w-full rounded-2xl" />
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <SkeletonCard />
           <SkeletonCard />
         </div>
@@ -64,18 +60,12 @@ export function HomeNewsClient() {
 
   return (
     <div className="space-y-8">
-      {/* Bento row: split hero + numbered headlines */}
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <div className="lg:col-span-2">
-          {hero && <HeroCard item={hero} />}
-        </div>
-        <div className="bdh-card-light p-4">
-          <h2 className="bdh-section-title mb-2">{t('trending')}</h2>
-          <div>
-            {headlines.map((item, i) => (
-              <HeadlineItem key={item.id} item={item} index={i} />
-            ))}
-          </div>
+      <div className="bdh-card-light p-4">
+        <h2 className="bdh-section-title mb-2">{t('trending')}</h2>
+        <div>
+          {headlines.map((item, i) => (
+            <HeadlineItem key={item.id} item={item} index={i} />
+          ))}
         </div>
       </div>
 

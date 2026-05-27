@@ -28,3 +28,12 @@ export interface RankingsPayload {
   standings: StandingRow[];
   topScorers: TopScorer[];
 }
+
+export interface FifaRanking {
+  rank: number;
+  team: string;
+  countryCode?: string;
+  crest?: string;
+  points: number;
+  previousRank?: number;
+}

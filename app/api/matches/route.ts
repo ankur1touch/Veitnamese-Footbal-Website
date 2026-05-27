@@ -4,11 +4,17 @@ import { getLiveMatches } from '@/lib/football-api';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-type MatchesTab = 'live' | 'upcoming' | 'results';
+type MatchesTab = 'live' | 'upcoming' | 'results' | 'all';
 
 function parseTab(value: unknown): MatchesTab {
-  if (value === 'upcoming' || value === 'results') return value;
+  if (value === 'upcoming' || value === 'results' || value === 'all') return value;
   return 'live';
+}
+
+function parseLeagueId(value: unknown): string | undefined {
+  if (typeof value === 'string' && value.trim()) return value;
+  if (typeof value === 'number' && Number.isFinite(value)) return String(value);
+  return undefined;
 }
 
 async function readBody(req: NextRequest): Promise<{ leagueId?: string; tab?: MatchesTab }> {
@@ -17,7 +23,7 @@ async function readBody(req: NextRequest): Promise<{ leagueId?: string; tab?: Ma
     if (!raw || typeof raw !== 'object') return {};
     const obj = raw as Record<string, unknown>;
     return {
-      leagueId: typeof obj.leagueId === 'string' ? obj.leagueId : undefined,
+      leagueId: parseLeagueId(obj.leagueId),
       tab: obj.tab ? parseTab(obj.tab) : undefined,
     };
   } catch {

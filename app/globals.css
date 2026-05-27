@@ -78,9 +78,28 @@ body {
   .news-scroll-track::-webkit-scrollbar-thumb {
     @apply rounded-full bg-brand-red/40;
   }
+
+  .hero-gradient {
+    background: linear-gradient(135deg, #b71c1c 0%, #0d1b2a 55%, #1b2838 100%);
+  }
+
+  .bdh-pill-btn {
+    @apply inline-flex items-center justify-center rounded-full px-5 py-2.5 text-xs font-bold uppercase tracking-widest transition-colors;
+  }
+
+  .bdh-strip-scroll {
+    @apply flex gap-3 overflow-x-auto pb-1 snap-x snap-mandatory scrollbar-none;
+  }
 }
 
 @layer utilities {
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
   .text-balance {
     text-wrap: balance;
   }
@@ -95,5 +114,16 @@ body {
   }
   100% {
     transform: translateX(-50%);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

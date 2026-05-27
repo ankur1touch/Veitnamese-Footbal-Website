@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 
-type BadgeVariant = 'default' | 'red' | 'yellow' | 'navy' | 'outline' | 'live' | 'muted';
+type BadgeVariant = 'default' | 'red' | 'yellow' | 'navy' | 'outline' | 'live' | 'muted' | 'wc' | 'tournament';
 
 const VARIANTS: Record<BadgeVariant, string> = {
   default: 'bg-brand-navy text-white',
@@ -11,6 +11,8 @@ const VARIANTS: Record<BadgeVariant, string> = {
   outline: 'border border-slate-300 text-brand-navy bg-white',
   live: 'bg-emerald-500 text-white animate-pulse',
   muted: 'bg-slate-100 text-slate-700',
+  wc: 'bg-brand-gold text-brand-navy font-bold',
+  tournament: 'bg-brand-navy text-brand-gold border border-brand-gold/30',
 };
 
 interface BadgeProps {

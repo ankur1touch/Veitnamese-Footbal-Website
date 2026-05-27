@@ -28,7 +28,53 @@
     "liveScores": "Tỷ số trực tiếp",
     "standings": "Bảng xếp hạng",
     "topScorers": "Vua phá lưới",
-    "readMore": "Xem thêm"
+    "readMore": "Xem thêm",
+    "hero": {
+      "featuredMatch": "Trận nổi bật",
+      "topStory": "Tin chính",
+      "viewMatch": "Xem trận",
+      "readStory": "Đọc tin",
+      "kickoff": "Giờ bóng lăn",
+      "wcTitle": "Hành trình World Cup 2026",
+      "wcSubtitle": "Theo dõi lịch thi đấu, bảng đấu và tin tức khi Việt Nam và thế giới hướng tới Mỹ, Canada & Mexico.",
+      "wcCta": "Trang World Cup"
+    },
+    "ticker": {
+      "live": "Tỷ số trực tiếp"
+    },
+    "matchOfDay": {
+      "title": "Trận đấu trong ngày",
+      "countdown": "Còn lại",
+      "live": "Đang diễn ra",
+      "cta": "Chi tiết trận"
+    },
+    "upcoming": {
+      "title": "Lịch thi đấu sắp tới",
+      "seeAll": "Tất cả trận"
+    },
+    "tournaments": {
+      "title": "Giải đấu",
+      "subtitle": "Các giải BóngĐáHôm theo dõi mỗi ngày",
+      "vleagueName": "V.League 1",
+      "vleagueDesc": "VĐQG Việt Nam",
+      "eplName": "Ngoại hạng Anh",
+      "eplDesc": "Giải bóng đá Anh",
+      "uclName": "Champions League",
+      "uclDesc": "Cúp C1 châu Âu",
+      "worldcupName": "World Cup 2026",
+      "worldcupDesc": "Mỹ · Canada · Mexico"
+    },
+    "fanZone": {
+      "title": "Khu vực CĐV",
+      "subtitle": "Bình chọn, dự đoán và theo dõi những câu chuyện lớn nhất cùng cộng đồng BóngĐáHôm.",
+      "predict": "Dự đoán tỷ số",
+      "discuss": "Thảo luận",
+      "followWc": "Theo dõi WC 2026"
+    },
+    "fifaRankings": {
+      "title": "BXH FIFA",
+      "vietnam": "Việt Nam"
+    }
   },
   "sidebar": {
     "liveScores": "Tỷ số trực tiếp",
@@ -102,7 +148,16 @@
     "privacy": "Chính sách bảo mật",
     "rss": "RSS",
     "ads": "Quảng cáo",
-    "rights": "Bản quyền thuộc về BóngĐáHôm"
+    "rights": "Bản quyền thuộc về BóngĐáHôm",
+    "football": "Bóng đá",
+    "tournaments": "Giải đấu",
+    "newsletter": {
+      "title": "Bản tin",
+      "subtitle": "Tin V.League, Ngoại hạng Anh và World Cup mỗi ngày qua email.",
+      "placeholder": "email@example.com",
+      "cta": "Đăng ký",
+      "success": "Đã đăng ký!"
+    }
   },
   "common": {
     "live": "TRỰC TIẾP",

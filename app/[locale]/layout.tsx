@@ -1,12 +1,11 @@
 import type { Metadata } from 'next';
-import { Nunito_Sans, Playfair_Display, JetBrains_Mono } from 'next/font/google';
+import { Nunito_Sans, Bebas_Neue, Outfit, JetBrains_Mono } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
 import { getTranslations, setRequestLocale, getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import { Header } from '@/components/layout/Header';
 import { BreakingTicker } from '@/components/layout/BreakingTicker';
-import { NewsletterCTA } from '@/components/layout/NewsletterCTA';
 import { Footer } from '@/components/layout/Footer';
 import { getBreakingNews } from '@/lib/rss';
 import { StoreProvider } from '@/store/StoreProvider';
@@ -19,11 +18,18 @@ const nunito = Nunito_Sans({
   weight: ['400', '600', '700'],
 });
 
-const playfair = Playfair_Display({
-  subsets: ['latin', 'vietnamese'],
+const bebas = Bebas_Neue({
+  subsets: ['latin'],
   variable: '--font-display',
   display: 'swap',
-  weight: ['700', '800', '900'],
+  weight: ['400'],
+});
+
+const outfit = Outfit({
+  subsets: ['latin'],
+  variable: '--font-ui',
+  display: 'swap',
+  weight: ['400', '500', '600', '700'],
 });
 
 const jetbrains = JetBrains_Mono({
@@ -99,7 +105,8 @@ export default async function LocaleLayout({
   return (
     <html
       lang={locale}
-      className={`${nunito.variable} ${playfair.variable} ${jetbrains.variable}`}
+      data-scroll-behavior="smooth"
+      className={`${nunito.variable} ${bebas.variable} ${outfit.variable} ${jetbrains.variable}`}
       suppressHydrationWarning
     >
       <body className="min-h-screen flex flex-col bg-brand-surface text-brand-navy font-sans">
@@ -113,7 +120,6 @@ export default async function LocaleLayout({
             <Header />
             <BreakingTicker items={breakingNews} />
             <main className="flex-1">{children}</main>
-            <NewsletterCTA />
             <Footer />
           </StoreProvider>
         </NextIntlClientProvider>

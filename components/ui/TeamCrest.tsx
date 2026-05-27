@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { useState } from 'react';
 import { resolveTeamBrand } from '@/lib/team-logos';
 import { cn } from '@/lib/utils';
@@ -13,9 +12,9 @@ interface TeamCrestProps {
 }
 
 const SIZES = {
-  sm: { box: 'h-7 w-7', img: 28, text: 'text-[9px]' },
-  md: { box: 'h-9 w-9 sm:h-10 sm:w-10', img: 40, text: 'text-[10px]' },
-  lg: { box: 'h-12 w-12 sm:h-14 sm:w-14', img: 56, text: 'text-xs' },
+  sm: { box: 'h-7 w-7', text: 'text-[9px]' },
+  md: { box: 'h-9 w-9 sm:h-10 sm:w-10', text: 'text-[10px]' },
+  lg: { box: 'h-12 w-12 sm:h-14 sm:w-14', text: 'text-xs' },
 };
 
 export function TeamCrest({ teamName, crest, size = 'md', className }: TeamCrestProps) {
@@ -33,12 +32,13 @@ export function TeamCrest({ teamName, crest, size = 'md', className }: TeamCrest
           className,
         )}
       >
-        <Image
-          src={brand.crest!}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={brand.crest}
           alt=""
-          width={s.img}
-          height={s.img}
           className="h-full w-full rounded-full object-contain"
+          loading="lazy"
+          decoding="async"
           onError={() => setFailed(true)}
         />
       </div>

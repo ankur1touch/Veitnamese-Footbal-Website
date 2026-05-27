@@ -1,3 +1,19 @@
+/** Match kickoff label — fixed locale so SSR and hydration stay in sync. */
+export function formatMatchKickoff(date: Date | string, locale = 'vi'): string {
+  const d = typeof date === 'string' ? new Date(date) : date;
+  if (Number.isNaN(d.getTime())) return '';
+
+  const loc = locale === 'vi' ? 'vi-VN' : 'en-GB';
+  return d.toLocaleString(loc, {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  });
+}
+
 /** Stable formatted date — safe for SSR and first paint (no Date.now()). */
 export function formatAbsoluteTime(
   date: Date | string,

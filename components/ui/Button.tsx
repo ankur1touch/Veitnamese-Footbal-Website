@@ -5,10 +5,11 @@ import { cn } from '@/lib/utils';
 
 type Variant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
 type Size = 'sm' | 'md' | 'lg';
+type Shape = 'default' | 'pill';
 
 const VARIANTS: Record<Variant, string> = {
   primary:
-    'bg-brand-red text-white hover:bg-red-700 focus-visible:ring-brand-red shadow-sm',
+    'bg-brand-red text-white hover:bg-red-700 focus-visible:ring-brand-red shadow-sm uppercase tracking-wide',
   secondary:
     'bg-brand-navy text-white hover:bg-slate-800 focus-visible:ring-brand-navy',
   outline:
@@ -25,15 +26,21 @@ const SIZES: Record<Size, string> = {
   lg: 'h-12 px-6 text-base',
 };
 
+const SHAPES: Record<Shape, string> = {
+  default: 'rounded-lg',
+  pill: 'rounded-full',
+};
+
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Variant;
   size?: Size;
+  shape?: Shape;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
-  { children, variant = 'primary', size = 'md', leftIcon, rightIcon, className, ...rest },
+  { children, variant = 'primary', size = 'md', shape = 'default', leftIcon, rightIcon, className, ...rest },
   ref,
 ) {
   return (
@@ -41,9 +48,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       ref={ref}
       suppressHydrationWarning
       className={cn(
-        'inline-flex items-center justify-center gap-2 rounded-lg font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60',
+        'inline-flex items-center justify-center gap-2 font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60',
         VARIANTS[variant],
         SIZES[size],
+        SHAPES[shape],
         className,
       )}
       {...rest}

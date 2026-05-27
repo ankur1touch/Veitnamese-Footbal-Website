@@ -11,12 +11,16 @@ export async function GET(req: Request) {
   }
 
   try {
+    const headers: Record<string, string> = {
+      'User-Agent': 'BongDaHom/1.0',
+      Accept: 'image/*',
+    };
+    if (url.includes('fotmob')) {
+      headers.Referer = 'https://www.fotmob.com/';
+    }
+
     const upstream = await fetch(url, {
-      headers: {
-        'User-Agent': 'BongDaHom/1.0',
-        Accept: 'image/*',
-        Referer: url.includes('fotmob') ? 'https://www.fotmob.com/' : undefined,
-      },
+      headers,
       cache: 'force-cache',
       next: { revalidate: 86400 },
     });

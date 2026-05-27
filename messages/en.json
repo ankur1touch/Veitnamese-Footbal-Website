@@ -28,7 +28,53 @@
     "liveScores": "Live Scores",
     "standings": "Standings",
     "topScorers": "Top Scorers",
-    "readMore": "Read More"
+    "readMore": "Read More",
+    "hero": {
+      "featuredMatch": "Featured Match",
+      "topStory": "Top Story",
+      "viewMatch": "View match",
+      "readStory": "Read story",
+      "kickoff": "Kick-off",
+      "wcTitle": "Road to World Cup 2026",
+      "wcSubtitle": "Follow fixtures, groups and news as Vietnam and the world prepare for USA, Canada & Mexico.",
+      "wcCta": "World Cup Hub"
+    },
+    "ticker": {
+      "live": "Live Scores"
+    },
+    "matchOfDay": {
+      "title": "Match of the Day",
+      "countdown": "Kick-off in",
+      "live": "Live now",
+      "cta": "Match centre"
+    },
+    "upcoming": {
+      "title": "Upcoming Fixtures",
+      "seeAll": "All matches"
+    },
+    "tournaments": {
+      "title": "Tournaments",
+      "subtitle": "Leagues and cups we cover every day",
+      "vleagueName": "V.League 1",
+      "vleagueDesc": "Vietnamese top flight",
+      "eplName": "Premier League",
+      "eplDesc": "English top flight",
+      "uclName": "Champions League",
+      "uclDesc": "Europe's elite club competition",
+      "worldcupName": "World Cup 2026",
+      "worldcupDesc": "USA · Canada · Mexico"
+    },
+    "fanZone": {
+      "title": "Fan Zone",
+      "subtitle": "Vote, predict and follow the biggest stories with the BóngĐáHôm community.",
+      "predict": "Predict scores",
+      "discuss": "Join discussion",
+      "followWc": "Follow WC 2026"
+    },
+    "fifaRankings": {
+      "title": "FIFA Rankings",
+      "vietnam": "Vietnam"
+    }
   },
   "sidebar": {
     "liveScores": "Live Scores",
@@ -102,7 +148,16 @@
     "privacy": "Privacy Policy",
     "rss": "RSS",
     "ads": "Advertising",
-    "rights": "All rights reserved"
+    "rights": "All rights reserved",
+    "football": "Football",
+    "tournaments": "Tournaments",
+    "newsletter": {
+      "title": "Newsletter",
+      "subtitle": "Daily V.League, Premier League and World Cup updates in your inbox.",
+      "placeholder": "email@example.com",
+      "cta": "Subscribe",
+      "success": "Subscribed!"
+    }
   },
   "common": {
     "live": "LIVE",

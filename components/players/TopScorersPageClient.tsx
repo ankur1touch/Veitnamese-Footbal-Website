@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { PlayerAvatar } from '@/components/ui/PlayerAvatar';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';

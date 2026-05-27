@@ -8,10 +8,10 @@ import type { NewsItem } from '@/types';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-async function buildPayload(category?: string): Promise<NewsItem[]> {
+async function buildPayload(category?: string, locale = 'vi'): Promise<NewsItem[]> {
   const [rss, internal] = await Promise.all([
     getAggregatedNews(),
-    getArticlesAsNewsItems(),
+    getArticlesAsNewsItems(locale),
   ]);
 
   const merged: NewsItem[] = [...internal, ...rss]
@@ -31,15 +31,19 @@ async function buildPayload(category?: string): Promise<NewsItem[]> {
 export async function POST(req: Request) {
   try {
     let category: string | undefined;
+    let locale = 'vi';
     try {
       const body = await req.json();
-      if (body && typeof body.category === 'string') {
-        category = body.category;
+      if (body && typeof body === 'object') {
+        if (typeof body.category === 'string') category = body.category;
+        if (typeof body.locale === 'string' && (body.locale === 'vi' || body.locale === 'en')) {
+          locale = body.locale;
+        }
       }
     } catch {
     }
 
-    const items = await buildPayload(category);
+    const items = await buildPayload(category, locale);
     return NextResponse.json(items, {
       headers: { 'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600' },
     });

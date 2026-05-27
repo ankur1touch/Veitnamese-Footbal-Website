@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { fetchMatchDetailPayload } from '@/lib/api-football-cms';
+import { getMatchDetailPayload } from '@/lib/football-api';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -9,7 +9,7 @@ type RouteParams = { params: Promise<{ id: string }> };
 export async function GET(_req: Request, { params }: RouteParams) {
   try {
     const { id } = await params;
-    const payload = await fetchMatchDetailPayload(id);
+    const payload = await getMatchDetailPayload(id);
     if (!payload.fixture) {
       return NextResponse.json({ error: 'Match not found' }, { status: 404 });
     }

@@ -1,13 +1,15 @@
 import { cache } from 'react';
-import type { LiveMatch, StandingRow, TopScorer } from './types';
+import type { LiveMatch, StandingRow, TopScorer, FifaRanking, FixtureDetail, MatchDetailPayload } from './types';
 import { createTimedCache } from './memory-cache';
 import { resolveTeamBrand } from './team-logos';
-import { resolveLeague, DEFAULT_LEAGUE } from './league-config';
+import { resolveLeague, DEFAULT_LEAGUE, LEAGUES } from './league-config';
 import {
   fetchCmsLiveMatches,
   fetchCmsMatchesForLeague,
   fetchCmsStandings,
   fetchCmsTopScorers,
+  fetchCmsFixtures,
+  fetchMatchDetailPayload,
 } from './api-football-cms';
 
 const FOOTBALL_DATA_BASE = 'https://api.football-data.org/v4';
@@ -43,6 +45,7 @@ async function fdFetch<T>(path: string): Promise<T | null> {
 const standingsCaches = new Map<string, ReturnType<typeof createTimedCache<StandingRow[]>>>();
 const matchesCaches = new Map<string, ReturnType<typeof createTimedCache<LiveMatch[]>>>();
 const scorersCaches = new Map<string, ReturnType<typeof createTimedCache<TopScorer[]>>>();
+const fifaRankingsCache = createTimedCache<FifaRanking[]>(24 * 60 * 60 * 1000);
 
 function getStandingsCache(key: string) {
   let c = standingsCaches.get(key);
@@ -212,16 +215,29 @@ export const getTopScorers = cache(async (leagueId?: string | number): Promise<T
 export const getLiveMatches = cache(
   async (
     leagueId?: string | number,
-    tab: 'live' | 'upcoming' | 'results' = 'live',
+    tab: 'live' | 'upcoming' | 'results' | 'all' = 'live',
   ): Promise<LiveMatch[]> => {
     const cfg = resolveLeague(leagueId);
     const key = `${cfg.leagueId}:${cfg.season}:${tab}`;
     return getMatchesCache(key)(async () => {
-      const cms = await fetchCmsMatchesForLeague(cfg.leagueId, cfg.season, tab);
+      if (tab === 'all') {
+        const [live, upcoming, recent] = await Promise.all([
+          fetchCmsLiveMatches(cfg.leagueId),
+          fetchCmsFixtures(cfg.leagueId, cfg.season, { next: 8 }),
+          fetchCmsFixtures(cfg.leagueId, cfg.season, { last: 8 }),
+        ]);
+        const merged = [...(live ?? []), ...(upcoming ?? []), ...(recent ?? [])];
+        const unique = merged.filter(
+          (m, i, arr) => arr.findIndex((x) => x.id === m.id) === i,
+        );
+        if (unique.length > 0) return enrichMatches(unique);
+      }
+
+      const cms = await fetchCmsMatchesForLeague(cfg.leagueId, cfg.season, tab === 'all' ? 'live' : tab);
       if (cms && cms.length > 0) return enrichMatches(cms);
 
       if (cfg.leagueId === 140) {
-        if (tab === 'live') {
+        if (tab === 'live' || tab === 'all') {
           const liveOnly = await fetchCmsLiveMatches(cfg.leagueId);
           if (liveOnly && liveOnly.length > 0) return enrichMatches(liveOnly);
         }
@@ -232,6 +248,128 @@ export const getLiveMatches = cache(
     });
   },
 );
+
+export const getTickerMatches = cache(async (): Promise<LiveMatch[]> => {
+  return getMatchesCache('ticker:global')(async () => {
+    const [live, eplRecent, uclRecent] = await Promise.all([
+      fetchCmsLiveMatches(),
+      fetchCmsFixtures(LEAGUES.epl.id, LEAGUES.epl.season, { last: 6 }),
+      fetchCmsFixtures(LEAGUES.ucl.id, LEAGUES.ucl.season, { last: 4 }),
+    ]);
+    const merged = [...(live ?? []), ...(eplRecent ?? []), ...(uclRecent ?? [])];
+    const unique = merged.filter((m, i, arr) => arr.findIndex((x) => x.id === m.id) === i);
+    if (unique.length > 0) {
+      return enrichMatches(unique).sort((a, b) => {
+        const order = { IN_PLAY: 0, LIVE: 0, HT: 0, PAUSED: 1, FINISHED: 2, FT: 2, SCHEDULED: 3 } as Record<string, number>;
+        return (order[a.status] ?? 4) - (order[b.status] ?? 4);
+      });
+    }
+    return enrichMatches(FALLBACK_MATCHES);
+  });
+});
+
+export const getMatchOfTheDay = cache(async (): Promise<LiveMatch | null> => {
+  for (const league of [LEAGUES.epl, LEAGUES.ucl, LEAGUES.vleague]) {
+    const upcoming = await getLiveMatches(league.id, 'upcoming');
+    const pick = upcoming.find((m) => m.status === 'SCHEDULED') ?? upcoming[0];
+    if (pick) return pick;
+  }
+  const live = await getLiveMatches(undefined, 'live');
+  return live[0] ?? FALLBACK_MATCHES[2] ?? null;
+});
+
+export const getFifaRankings = cache(async (limit = 10): Promise<FifaRanking[]> => {
+  const all = await fifaRankingsCache(async () => FALLBACK_FIFA_RANKINGS);
+  return all.slice(0, limit);
+});
+
+function mapLiveStatusToShort(status: LiveMatch['status']): string {
+  if (status === 'FINISHED' || status === 'FT') return 'FT';
+  if (status === 'IN_PLAY' || status === 'LIVE') return '2H';
+  if (status === 'HT' || status === 'PAUSED') return 'HT';
+  return 'NS';
+}
+
+function liveMatchToFixtureDetail(match: LiveMatch): FixtureDetail {
+  const elapsed =
+    match.minute && /^\d+/.test(match.minute) ? Number.parseInt(match.minute, 10) : null;
+
+  return {
+    fixture: {
+      id: match.id,
+      date: match.utcDate,
+      status: { short: mapLiveStatusToShort(match.status), elapsed },
+    },
+    league: { id: 0, name: match.competition },
+    teams: {
+      home: {
+        id: match.homeTeamId ?? match.id * 10 + 1,
+        name: match.homeTeam,
+        logo: match.homeCrest,
+        winner:
+          match.homeScore != null && match.awayScore != null
+            ? match.homeScore > match.awayScore
+            : null,
+      },
+      away: {
+        id: match.awayTeamId ?? match.id * 10 + 2,
+        name: match.awayTeam,
+        logo: match.awayCrest,
+        winner:
+          match.homeScore != null && match.awayScore != null
+            ? match.awayScore > match.homeScore
+            : null,
+      },
+    },
+    goals: { home: match.homeScore, away: match.awayScore },
+    score: {
+      fulltime: { home: match.homeScore, away: match.awayScore },
+    },
+  };
+}
+
+function buildMatchDetailFromLiveMatch(match: LiveMatch): MatchDetailPayload {
+  return {
+    fixture: liveMatchToFixtureDetail(match),
+    lineups: [],
+    events: [],
+    stats: [],
+    h2h: [],
+  };
+}
+
+async function findKnownLiveMatch(fixtureId: string): Promise<LiveMatch | null> {
+  const id = Number(fixtureId);
+  if (!Number.isFinite(id)) return null;
+
+  const fallback = FALLBACK_MATCHES.find((m) => m.id === id);
+  if (fallback) return enrichMatch(fallback);
+
+  const ticker = await getTickerMatches();
+  const fromTicker = ticker.find((m) => m.id === id);
+  if (fromTicker) return fromTicker;
+
+  for (const league of Object.values(LEAGUES)) {
+    for (const tab of ['live', 'upcoming', 'results', 'all'] as const) {
+      const matches = await getLiveMatches(league.id, tab);
+      const found = matches.find((m) => m.id === id);
+      if (found) return found;
+    }
+  }
+
+  return null;
+}
+
+/** CMS match detail with fallback from cached/live match lists when fixture API misses. */
+export const getMatchDetailPayload = cache(async (fixtureId: string): Promise<MatchDetailPayload> => {
+  const cms = await fetchMatchDetailPayload(fixtureId);
+  if (cms.fixture) return cms;
+
+  const known = await findKnownLiveMatch(fixtureId);
+  if (known) return buildMatchDetailFromLiveMatch(known);
+
+  return cms;
+});
 
 // ---------- Fallback Data (used when no API token / CMS) ----------
 
@@ -303,4 +441,18 @@ const FALLBACK_SCORERS: TopScorer[] = [
   { name: 'Đinh Thanh Bình', team: 'Viettel', goals: 11 },
   { name: 'Tô Văn Vũ', team: 'Bình Dương', goals: 10 },
   { name: 'Nguyễn Tiến Linh', team: 'Bình Định', goals: 9 },
+];
+
+const FALLBACK_FIFA_RANKINGS: FifaRanking[] = [
+  { rank: 1, team: 'Argentina', points: 1883 },
+  { rank: 2, team: 'France', points: 1859 },
+  { rank: 3, team: 'England', points: 1813 },
+  { rank: 4, team: 'Brazil', points: 1785 },
+  { rank: 5, team: 'Belgium', points: 1736 },
+  { rank: 6, team: 'Portugal', points: 1728 },
+  { rank: 7, team: 'Netherlands', points: 1694 },
+  { rank: 8, team: 'Spain', points: 1687 },
+  { rank: 9, team: 'Italy', points: 1657 },
+  { rank: 10, team: 'Croatia', points: 1643 },
+  { rank: 96, team: 'Vietnam', points: 1120 },
 ];

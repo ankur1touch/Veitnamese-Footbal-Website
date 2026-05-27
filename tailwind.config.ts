@@ -33,14 +33,17 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ['var(--font-body)', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-body)', 'var(--font-ui)', 'system-ui', 'sans-serif'],
         body: ['var(--font-body)', 'system-ui', 'sans-serif'],
-        display: ['var(--font-display)', 'Georgia', 'serif'],
+        ui: ['var(--font-ui)', 'var(--font-body)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-display)', 'var(--font-ui)', 'system-ui', 'sans-serif'],
         mono: ['var(--font-mono)', 'monospace'],
       },
       animation: {
         'ticker-scroll': 'ticker 40s linear infinite',
         'pulse-live': 'pulse-live 1.5s ease-in-out infinite',
+        fadeIn: 'fadeIn 0.5s ease-out forwards',
+        marquee: 'ticker 35s linear infinite',
       },
       keyframes: {
         ticker: {
@@ -50,6 +53,10 @@ const config: Config = {
         'pulse-live': {
           '0%, 100%': { opacity: '1' },
           '50%': { opacity: '0.4' },
+        },
+        fadeIn: {
+          '0%': { opacity: '0', transform: 'translateY(8px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
         },
       },
       boxShadow: {
