@@ -18,6 +18,8 @@ const nextConfig = {
       { protocol: 'https', hostname: 'api.dicebear.com' },
       { protocol: 'https', hostname: 'images.fotmob.com' },
       { protocol: 'https', hostname: 'i.imgur.com' },
+      // banthangvn.com CMS — article cover images may come from any host
+      { protocol: 'https', hostname: '**' },
     ],
   },
   experimental: {

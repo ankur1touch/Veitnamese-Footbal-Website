@@ -9,6 +9,7 @@ import { FanZoneStrip } from '@/components/home/FanZoneStrip';
 import { LiveScoresWidget } from '@/components/sidebar/LiveScoresWidget';
 import { HomeSidebarData } from '@/components/sidebar/HomeSidebarData';
 import { FifaRankingsWidget } from '@/components/sidebar/FifaRankingsWidget';
+import { CmsHomeSection } from '@/components/cms/CmsHomeSection';
 
 export const revalidate = 300;
 
@@ -26,8 +27,9 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         <UpcomingMatchesStripServer />
 
         <div className="grid grid-cols-1 gap-6 xl:grid-cols-12">
-          <section className="xl:col-span-8">
+          <section className="xl:col-span-8 space-y-10">
             <HomeNewsClient />
+            <CmsHomeSection locale={locale} />
           </section>
 
           <aside className="space-y-4 xl:col-span-4 xl:sticky xl:top-[120px] xl:self-start">

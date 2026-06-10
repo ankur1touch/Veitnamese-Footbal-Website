@@ -1,51 +1,38 @@
 import { NextResponse } from 'next/server';
-import { getAggregatedNews } from '@/lib/rss';
-import { getArticlesAsNewsItems } from '@/lib/mdx';
-import { isFootballNews } from '@/lib/football-news-filter';
-import { newsImageQualityScore } from '@/lib/news-images';
+import {
+  fetchBanthangVnAllSections,
+  banthangVnToNewsItem,
+} from '@/lib/banthangVnApi';
 import type { NewsItem } from '@/types';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-async function buildPayload(category?: string, locale = 'vi'): Promise<NewsItem[]> {
-  const [rss, internal] = await Promise.all([
-    getAggregatedNews(),
-    getArticlesAsNewsItems(locale),
-  ]);
+async function buildPayload(category?: string): Promise<NewsItem[]> {
+  const articles = await fetchBanthangVnAllSections(15);
+  const items: NewsItem[] = articles.map(banthangVnToNewsItem);
 
-  const merged: NewsItem[] = [...internal, ...rss]
-    .filter(isFootballNews)
-    .sort((a, b) => {
-      const scoreDiff = newsImageQualityScore(b) - newsImageQualityScore(a);
-      if (scoreDiff !== 0) return scoreDiff;
-      return new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime();
-    });
-
-  if (!category) return merged;
+  if (!category) return items;
 
   const lower = category.toLowerCase();
-  return merged.filter((n) => String(n.tag ?? '').toLowerCase().includes(lower));
+  return items.filter((n) => String(n.tag ?? '').toLowerCase().includes(lower));
 }
 
 export async function POST(req: Request) {
   try {
     let category: string | undefined;
-    let locale = 'vi';
     try {
       const body = await req.json();
-      if (body && typeof body === 'object') {
-        if (typeof body.category === 'string') category = body.category;
-        if (typeof body.locale === 'string' && (body.locale === 'vi' || body.locale === 'en')) {
-          locale = body.locale;
-        }
+      if (body && typeof body === 'object' && typeof body.category === 'string') {
+        category = body.category;
       }
     } catch {
+      // empty body — ignore
     }
 
-    const items = await buildPayload(category, locale);
+    const items = await buildPayload(category);
     return NextResponse.json(items, {
-      headers: { 'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600' },
+      headers: { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=120' },
     });
   } catch (err) {
     console.error('[/api/news] error', err);

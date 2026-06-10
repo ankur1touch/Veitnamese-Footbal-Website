@@ -12,7 +12,7 @@ export async function GET(req: Request) {
 
   try {
     const headers: Record<string, string> = {
-      'User-Agent': 'BongDaHom/1.0',
+      'User-Agent': 'BanThangVN/1.0',
       Accept: 'image/*',
     };
     if (url.includes('fotmob')) {

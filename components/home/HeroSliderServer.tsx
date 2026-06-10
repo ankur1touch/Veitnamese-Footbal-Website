@@ -1,7 +1,6 @@
 import dynamic from 'next/dynamic';
 import { getMatchOfTheDay } from '@/lib/football-api';
-import { getArticlesAsNewsItems } from '@/lib/mdx';
-import { getLatestNews } from '@/lib/rss';
+import { fetchBanthangVnHomePage, banthangVnToNewsItem } from '@/lib/banthangVnApi';
 import { formatMatchKickoff } from '@/lib/dates';
 import { SkeletonHero } from '@/components/ui/Skeleton';
 import type { HeroSlide } from './HeroSlider';
@@ -16,13 +15,12 @@ interface HeroSliderServerProps {
 }
 
 export async function HeroSliderServer({ locale }: HeroSliderServerProps) {
-  const [match, articles, rss] = await Promise.all([
+  const [match, cmsRes] = await Promise.all([
     getMatchOfTheDay(),
-    getArticlesAsNewsItems(locale),
-    getLatestNews(5),
+    fetchBanthangVnHomePage(5),
   ]);
 
-  const exclusive = articles.find((a) => a.exclusive) ?? articles[0] ?? rss[0];
+  const storyItems = (cmsRes?.data ?? []).map(banthangVnToNewsItem);
   const slides: HeroSlide[] = [];
 
   if (match) {
@@ -32,7 +30,15 @@ export async function HeroSliderServer({ locale }: HeroSliderServerProps) {
       kickoffLabel: formatMatchKickoff(match.utcDate, locale),
     });
   }
-  if (exclusive) slides.push({ type: 'story', item: exclusive });
+
+  // First CMS article as main story slide
+  if (storyItems[0]) slides.push({ type: 'story', item: storyItems[0] });
+
+  // Next 2 CMS articles as extra slides
+  storyItems.slice(1, 3).forEach((item) => {
+    slides.push({ type: 'story', item });
+  });
+
   slides.push({ type: 'wc' });
 
   return <HeroSlider slides={slides} />;

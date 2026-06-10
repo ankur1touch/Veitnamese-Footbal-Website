@@ -65,7 +65,7 @@ type CustomItem = {
 const parser: Parser<CustomFeed, CustomItem> = new Parser({
   timeout: 8000,
   headers: {
-    'User-Agent': 'BongDaHom/1.0 (+https://bongdahom.net)',
+    'User-Agent': 'BanThangVN/1.0 (+https://banthangvn.com)',
   },
   customFields: {
     item: [

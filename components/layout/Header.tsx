@@ -16,11 +16,20 @@ export async function Header() {
         <div className="container-fh">
           {/* Top row: logo + search + locale */}
           <div className="flex h-16 items-center gap-3 sm:gap-4 border-b border-white/10">
-            <div className="flex min-w-0 items-center gap-2">
-              <Logo size="md" variant="light" />
+            <div className="flex min-w-0 items-center gap-2.5">
+              <Logo size="md" />
+              {/* Site wordmark — font-body = Nunito Sans (latin+vietnamese), always crisp */}
+              <Link href="/" className="hidden sm:flex flex-col leading-none select-none" aria-label="BanThangVN">
+                <span className="font-body text-[19px] font-black tracking-tight leading-none text-white">
+                  Ban<span className="text-brand-gold">Thắng</span><span className="text-white/45">.VN</span>
+                </span>
+                <span className="mt-1 font-body text-[9px] font-semibold uppercase tracking-[0.16em] text-white/38">
+                  Tin bóng đá · Mỗi ngày
+                </span>
+              </Link>
               <Link
                 href="/world-cup"
-                className="hidden shrink-0 sm:inline-flex"
+                className="hidden shrink-0 lg:inline-flex"
               >
                 <Badge variant="wc" className="px-3 py-1 text-[10px] tracking-widest hover:bg-brand-gold-dark transition-colors">
                   WC 2026

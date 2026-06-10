@@ -1,5 +1,5 @@
-import { getAllArticles } from './mdx';
-import type { Article } from './types';
+import { fetchBanthangVnAllSections, banthangVnThumb } from './banthangVnApi';
+import type { BanthangVnArticle } from './banthangVnApi';
 
 function getSiteUrl(): string {
   return (process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000').replace(/\/$/, '');
@@ -19,43 +19,40 @@ function toRfc822(date: string): string {
   return Number.isNaN(d.getTime()) ? new Date().toUTCString() : d.toUTCString();
 }
 
-function articleItemXml(article: Article, siteUrl: string): string {
-  const link = `${siteUrl}/tin-tuc/${article.slug}`;
-  const description = escapeXml(article.excerpt || article.title);
+function articleItemXml(article: BanthangVnArticle, siteUrl: string): string {
+  const link = `${siteUrl}/bai-viet/${article.slug}`;
   const title = escapeXml(article.title);
-  const author = escapeXml(article.author);
-  const category = escapeXml(String(article.tag));
+  const description = escapeXml(article.summary || article.description || article.title);
+  const category = escapeXml(article.category?.[0] ?? article.endpointAssignments?.[0]?.name ?? 'Tin tức');
+  const thumb = banthangVnThumb(article);
 
   const enclosure =
-    article.image && article.image.startsWith('http')
-      ? `\n      <enclosure url="${escapeXml(article.image)}" type="image/jpeg" />`
+    thumb && thumb.startsWith('http')
+      ? `\n      <enclosure url="${escapeXml(thumb)}" type="image/jpeg" />`
       : '';
 
   return `    <item>
       <title>${title}</title>
       <link>${link}</link>
       <guid isPermaLink="true">${link}</guid>
-      <pubDate>${toRfc822(article.date)}</pubDate>
+      <pubDate>${toRfc822(article.createdAt)}</pubDate>
       <description>${description}</description>
-      <author>${author}</author>
       <category>${category}</category>${enclosure}
     </item>`;
 }
 
 export async function buildSiteRssFeed(): Promise<string> {
   const siteUrl = getSiteUrl();
-  const articles = await getAllArticles('vi');
+  const articles = await fetchBanthangVnAllSections(5);
   const latest = articles.slice(0, 50);
-  const lastBuild = latest[0]?.date
-    ? toRfc822(latest[0].date)
-    : new Date().toUTCString();
+  const lastBuild = latest[0]?.createdAt ? toRfc822(latest[0].createdAt) : new Date().toUTCString();
 
   const items = latest.map((a) => articleItemXml(a, siteUrl)).join('\n');
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>BóngĐáHôm — Tin bóng đá Việt Nam</title>
+    <title>BanThangVN — Tin bóng đá Việt Nam</title>
     <link>${siteUrl}</link>
     <description>Tin tức bóng đá V.League, Ngoại hạng Anh và World Cup 2026.</description>
     <language>vi-VN</language>
@@ -63,7 +60,7 @@ export async function buildSiteRssFeed(): Promise<string> {
     <atom:link href="${siteUrl}/rss.xml" rel="self" type="application/rss+xml" />
     <image>
       <url>${siteUrl}/icon.svg</url>
-      <title>BóngĐáHôm</title>
+      <title>BanThangVN</title>
       <link>${siteUrl}</link>
     </image>
 ${items}

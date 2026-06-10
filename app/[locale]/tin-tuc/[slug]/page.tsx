@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { setRequestLocale } from 'next-intl/server';
 import { ArticleHeader } from '@/components/article/ArticleHeader';
 import { ArticleBody } from '@/components/article/ArticleBody';
 import { RelatedNews } from '@/components/article/RelatedNews';
 import { getAllArticleSlugsAllLocales, getArticleBySlug, getRelatedArticles } from '@/lib/mdx';
+import { fetchBanthangVnArticleBySlug } from '@/lib/banthangVnApi';
 
 export const revalidate = 600;
 
@@ -25,7 +26,15 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { locale, slug } = await params;
   const article = await getArticleBySlug(slug, locale);
-  if (!article) return {};
+  if (!article) {
+    // Try CMS for metadata
+    const cmsArticle = await fetchBanthangVnArticleBySlug(slug);
+    if (!cmsArticle) return {};
+    return {
+      title: cmsArticle.title,
+      description: cmsArticle.summary || cmsArticle.description,
+    };
+  }
   return {
     title: article.title,
     description: article.excerpt,
@@ -51,7 +60,15 @@ export default async function ArticlePage({ params }: { params: Params }) {
   setRequestLocale(locale);
 
   const article = await getArticleBySlug(slug, locale);
-  if (!article) notFound();
+
+  if (!article) {
+    // Check if it's a CMS article — redirect to canonical CMS route
+    const cmsArticle = await fetchBanthangVnArticleBySlug(slug);
+    if (cmsArticle) {
+      redirect(`/${locale === 'vi' ? '' : locale + '/'}bai-viet/${slug}`.replace('//', '/'));
+    }
+    notFound();
+  }
 
   const related = await getRelatedArticles(article.slug, String(article.tag), 3, locale);
 
@@ -65,7 +82,7 @@ export default async function ArticlePage({ params }: { params: Params }) {
     image: article.image ? [article.image] : undefined,
     publisher: {
       '@type': 'Organization',
-      name: 'BóngĐáHôm',
+      name: 'BanThangVN',
     },
   };
 

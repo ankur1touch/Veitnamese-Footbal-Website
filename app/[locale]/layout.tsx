@@ -7,7 +7,7 @@ import { routing } from '@/i18n/routing';
 import { Header } from '@/components/layout/Header';
 import { BreakingTicker } from '@/components/layout/BreakingTicker';
 import { Footer } from '@/components/layout/Footer';
-import { getBreakingNews } from '@/lib/rss';
+import { fetchBanthangVnHomePage, banthangVnToNewsItem } from '@/lib/banthangVnApi';
 import { StoreProvider } from '@/store/StoreProvider';
 import '../globals.css';
 
@@ -15,7 +15,7 @@ const nunito = Nunito_Sans({
   subsets: ['latin', 'vietnamese'],
   variable: '--font-body',
   display: 'swap',
-  weight: ['400', '600', '700'],
+  weight: ['400', '600', '700', '800', '900'],
 });
 
 const bebas = Bebas_Neue({
@@ -52,7 +52,7 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: 'site' });
 
   return {
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://banthangvn.com'),
     title: {
       default: `${t('name')} — ${t('tagline')}`,
       template: `%s · ${t('name')}`,
@@ -86,9 +86,10 @@ export default async function LocaleLayout({
   setRequestLocale(locale);
 
   const messages = await getMessages();
-  let breakingNews: Awaited<ReturnType<typeof getBreakingNews>> = [];
+  let breakingNews: import('@/types').NewsItem[] = [];
   try {
-    breakingNews = await getBreakingNews();
+    const cmsRes = await fetchBanthangVnHomePage(8);
+    breakingNews = (cmsRes?.data ?? []).map(banthangVnToNewsItem);
   } catch (err) {
     console.error('[layout] breaking news failed:', (err as Error).message);
   }
@@ -96,8 +97,8 @@ export default async function LocaleLayout({
   const orgJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'NewsMediaOrganization',
-    name: 'BóngĐáHôm',
-    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://bongdahom.net',
+    name: 'BanThangVN',
+    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://banthangvn.com',
     inLanguage: locale === 'vi' ? 'vi-VN' : 'en-US',
     sameAs: [],
   };

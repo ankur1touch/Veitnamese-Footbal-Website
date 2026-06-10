@@ -1,4 +1,7 @@
-import { Link } from '@/i18n/navigation';
+'use client';
+
+import Link from 'next/link';
+import { Link as IntlLink } from '@/i18n/navigation';
 import type { NewsItem } from '@/lib/types';
 import type { ReactNode } from 'react';
 
@@ -8,16 +11,31 @@ interface NewsItemLinkProps {
   children: ReactNode;
 }
 
-/** Locale-aware link: internal MDX articles use i18n routes, external RSS opens in new tab. */
+/**
+ * Smart link component:
+ * - CMS articles (/bai-viet/...) → Next.js Link (locale-agnostic CMS route)
+ * - Internal MDX articles (/tin-tuc/...) → next-intl Link (locale-aware)
+ * - External RSS → <a target="_blank">
+ */
 export function NewsItemLink({ item, className, children }: NewsItemLinkProps) {
+  // CMS article — url is /bai-viet/<slug>
+  if (item.isInternal && item.url?.startsWith('/bai-viet/')) {
+    return (
+      <Link href={item.url} className={className}>
+        {children}
+      </Link>
+    );
+  }
+
+  // Internal MDX article
   if (item.isInternal && item.slug) {
     return (
-      <Link
+      <IntlLink
         href={{ pathname: '/tin-tuc/[slug]', params: { slug: item.slug } }}
         className={className}
       >
         {children}
-      </Link>
+      </IntlLink>
     );
   }
 

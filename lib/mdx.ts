@@ -78,7 +78,7 @@ export async function getArticlesAsNewsItems(locale = 'vi'): Promise<NewsItem[]>
     excerpt: a.excerpt,
     url: `/tin-tuc/${a.slug}`,
     image: a.image || getTagFallbackImage(String(a.tag ?? ''), a.slug),
-    source: 'BóngĐáHôm',
+    source: 'BanThangVN',
     pubDate: new Date(a.date).toISOString(),
     tag: a.tag,
     isInternal: true,

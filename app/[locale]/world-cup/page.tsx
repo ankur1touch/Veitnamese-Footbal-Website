@@ -1,15 +1,15 @@
 import type { Metadata } from 'next';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
-import { NewsListingClient } from '@/components/news/NewsListingClient';
 import { Badge } from '@/components/ui/Badge';
+import { CmsSectionPage } from '@/components/cms/CmsSectionPage';
+import { BanthangVnEndpoints } from '@/lib/banthangVnApi';
 
-export const revalidate = 300;
+export const revalidate = 60;
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}): Promise<Metadata> {
+type Params = Promise<{ locale: string }>;
+type SearchParams = Promise<{ page?: string }>;
+
+export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'nav' });
   return {
@@ -23,10 +23,13 @@ export async function generateMetadata({
 
 export default async function WorldCupPage({
   params,
+  searchParams,
 }: {
-  params: Promise<{ locale: string }>;
+  params: Params;
+  searchParams: SearchParams;
 }) {
   const { locale } = await params;
+  const { page } = await searchParams;
   setRequestLocale(locale);
   const tNav = await getTranslations({ locale, namespace: 'nav' });
 
@@ -48,7 +51,14 @@ export default async function WorldCupPage({
         </div>
       </header>
 
-      <NewsListingClient initialFilter="worldCup" />
+      {/* CMS articles */}
+      <CmsSectionPage
+        endpoint={BanthangVnEndpoints.WorldCup}
+        title=""
+        page={page ? Number(page) : 1}
+        accentClass="from-emerald-900 to-emerald-700"
+        locale={locale}
+      />
     </div>
   );
 }

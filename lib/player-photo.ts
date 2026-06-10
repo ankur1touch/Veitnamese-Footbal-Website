@@ -17,7 +17,7 @@ export async function isPlayerPhotoPlaceholder(url: string): Promise<boolean> {
 async function isValidPlayerPhoto(url: string): Promise<boolean> {
   try {
     const headers: Record<string, string> = {
-      'User-Agent': 'BongDaHom/1.0',
+      'User-Agent': 'BanThangVN/1.0',
       Accept: 'image/*',
     };
     if (url.includes('fotmob.com')) {
@@ -104,7 +104,7 @@ async function tryFotmobPhoto(name: string, teamName?: string): Promise<string |
     const res = await fetch(
       `https://www.fotmob.com/api/data/search/suggest?hits=5&lang=en&term=${term}`,
       {
-        headers: { 'User-Agent': 'BongDaHom/1.0' },
+        headers: { 'User-Agent': 'BanThangVN/1.0' },
         next: { revalidate: 86400 },
       },
     );

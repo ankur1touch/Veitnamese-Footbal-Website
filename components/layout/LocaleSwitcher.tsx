@@ -2,6 +2,7 @@
 
 import { useLocale } from 'next-intl';
 import { usePathname, useRouter } from '@/i18n/navigation';
+import { useParams } from 'next/navigation';
 import { useTransition } from 'react';
 import { cn } from '@/lib/utils';
 import { HydrationSafeButton } from '@/components/ui/HydrationSafeButton';
@@ -10,13 +11,18 @@ export function LocaleSwitcher() {
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
+  const params = useParams();
   const [isPending, startTransition] = useTransition();
 
   const otherLocale = locale === 'vi' ? 'en' : 'vi';
 
   const switchLocale = () => {
     startTransition(() => {
-      router.replace(pathname as '/', { locale: otherLocale });
+      router.replace(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        { pathname: pathname as any, params: params as any },
+        { locale: otherLocale },
+      );
     });
   };
 

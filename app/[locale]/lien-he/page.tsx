@@ -17,8 +17,8 @@ export default async function ContactPage({
       <h1 className="font-display text-3xl font-extrabold text-brand-navy">Liên hệ</h1>
       <p className="mt-4 text-slate-600 leading-relaxed">
         Gửi ý kiến, góp ý hoặc hợp tác qua email:{' '}
-        <a href="mailto:lienhe@bongdahom.net" className="font-semibold text-brand-red hover:underline">
-          lienhe@bongdahom.net
+        <a href="mailto:lienhe@banthangvn.com" className="font-semibold text-brand-red hover:underline">
+          lienhe@banthangvn.com
         </a>
       </p>
     </div>

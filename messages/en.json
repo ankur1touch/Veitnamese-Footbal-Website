@@ -1,8 +1,8 @@
 {
   "site": {
-    "name": "BóngĐáHôm",
+    "name": "BanThangVN",
     "tagline": "Football news daily",
-    "description": "Latest football news, live scores, standings and fixtures — V.League, Premier League and World Cup."
+    "description": "Latest Vietnamese football news, live scores, standings and fixtures — V.League, Premier League and World Cup."
   },
   "nav": {
     "news": "News",
@@ -66,7 +66,7 @@
     },
     "fanZone": {
       "title": "Fan Zone",
-      "subtitle": "Vote, predict and follow the biggest stories with the BóngĐáHôm community.",
+      "subtitle": "Vote, predict and follow the biggest stories with the BanThangVN community.",
       "predict": "Predict scores",
       "discuss": "Join discussion",
       "followWc": "Follow WC 2026"
@@ -132,7 +132,7 @@
   },
   "search": {
     "title": "Search",
-    "subtitle": "Find news across BóngĐáHôm and aggregated sources.",
+    "subtitle": "Find news across BanThangVN and aggregated sources.",
     "placeholder": "Search teams, players, leagues…",
     "placeholderShort": "Search…",
     "useHeaderSearch": "Use the search bar in the header to find news.",

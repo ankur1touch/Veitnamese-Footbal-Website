@@ -1,10 +1,25 @@
 import type { MetadataRoute } from 'next';
-import { getAllArticleSlugs } from '@/lib/mdx';
+import { fetchBanthangVnAllSections } from '@/lib/banthangVnApi';
 
-const STATIC_PATHS = ['', '/tin-tuc', '/world-cup', '/tran-dau', '/bang-xep-hang', '/cau-thu', '/v-league', '/ngoai-hang-anh'];
+const STATIC_PATHS = [
+  '',
+  '/tin-tuc',
+  '/tran-dau',
+  '/bang-xep-hang',
+  '/cau-thu',
+  '/v-league',
+  '/world-cup',
+  '/premier-league',
+  '/champions-league',
+  '/la-liga',
+  '/national-teams',
+  '/transfers',
+  '/analysis',
+  '/other',
+];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const base = process.env.NEXT_PUBLIC_SITE_URL || 'https://bongdahom.net';
+  const base = (process.env.NEXT_PUBLIC_SITE_URL || 'https://banthangvn.com').replace(/\/$/, '');
   const now = new Date();
 
   const staticEntries: MetadataRoute.Sitemap = STATIC_PATHS.map((path) => ({
@@ -14,13 +29,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: path === '' ? 1 : 0.7,
   }));
 
-  const slugs = await getAllArticleSlugs('vi');
-  const articleEntries: MetadataRoute.Sitemap = slugs.map((slug) => ({
-    url: `${base}/tin-tuc/${slug}`,
-    lastModified: now,
-    changeFrequency: 'weekly',
-    priority: 0.6,
-  }));
+  let articleEntries: MetadataRoute.Sitemap = [];
+  try {
+    const articles = await fetchBanthangVnAllSections(5);
+    articleEntries = articles.map((a) => ({
+      url: `${base}/bai-viet/${a.slug}`,
+      lastModified: new Date(a.updatedAt || a.createdAt),
+      changeFrequency: 'weekly' as const,
+      priority: 0.6,
+    }));
+  } catch {
+    // sitemap still works without CMS articles
+  }
 
   return [...staticEntries, ...articleEntries];
 }

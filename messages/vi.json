@@ -1,7 +1,7 @@
 {
   "site": {
-    "name": "BóngĐáHôm",
-    "tagline": "Tin bóng đá hàng ngày",
+    "name": "BanThangVN",
+    "tagline": "Tin bóng đá mỗi ngày",
     "description": "Tin tức, tỷ số trực tiếp, bảng xếp hạng và lịch thi đấu bóng đá mới nhất — V.League, Ngoại hạng Anh và thế giới."
   },
   "nav": {
@@ -54,7 +54,7 @@
     },
     "tournaments": {
       "title": "Giải đấu",
-      "subtitle": "Các giải BóngĐáHôm theo dõi mỗi ngày",
+      "subtitle": "Các giải BanThangVN theo dõi mỗi ngày",
       "vleagueName": "V.League 1",
       "vleagueDesc": "VĐQG Việt Nam",
       "eplName": "Ngoại hạng Anh",
@@ -66,7 +66,7 @@
     },
     "fanZone": {
       "title": "Khu vực CĐV",
-      "subtitle": "Bình chọn, dự đoán và theo dõi những câu chuyện lớn nhất cùng cộng đồng BóngĐáHôm.",
+      "subtitle": "Bình chọn, dự đoán và theo dõi những câu chuyện lớn nhất cùng cộng đồng BanThangVN.",
       "predict": "Dự đoán tỷ số",
       "discuss": "Thảo luận",
       "followWc": "Theo dõi WC 2026"
@@ -132,7 +132,7 @@
   },
   "search": {
     "title": "Tìm kiếm",
-    "subtitle": "Tìm tin tức trên BóngĐáHôm và các nguồn tổng hợp.",
+      "subtitle": "Tìm tin tức trên BanThangVN và các nguồn tổng hợp.",
     "placeholder": "Tìm đội bóng, cầu thủ, giải đấu…",
     "placeholderShort": "Tìm kiếm…",
     "useHeaderSearch": "Dùng thanh tìm kiếm trên header để tìm tin tức.",
@@ -148,7 +148,7 @@
     "privacy": "Chính sách bảo mật",
     "rss": "RSS",
     "ads": "Quảng cáo",
-    "rights": "Bản quyền thuộc về BóngĐáHôm",
+    "rights": "Bản quyền thuộc về BanThangVN",
     "football": "Bóng đá",
     "tournaments": "Giải đấu",
     "newsletter": {

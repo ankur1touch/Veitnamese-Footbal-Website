@@ -22,6 +22,15 @@ export const routing = defineRouting({
     '/chinh-sach': { vi: '/chinh-sach', en: '/privacy' },
     '/gioi-thieu': { vi: '/gioi-thieu', en: '/about' },
     '/quang-cao': { vi: '/quang-cao', en: '/advertise' },
+    // CMS section routes (banthangvn.com)
+    '/premier-league': '/premier-league',
+    '/champions-league': '/champions-league',
+    '/la-liga': '/la-liga',
+    '/national-teams': '/national-teams',
+    '/transfers': '/transfers',
+    '/analysis': '/analysis',
+    '/other': '/other',
+    '/bai-viet/[slug]': '/bai-viet/[slug]',
   },
 });
 

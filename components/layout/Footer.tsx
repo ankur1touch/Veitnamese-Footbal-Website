@@ -1,6 +1,6 @@
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
-import { Logo } from './Logo';
+import { Logo, LogoMark } from './Logo';
 import { FooterNewsletter } from './FooterNewsletter';
 
 export function Footer() {
@@ -15,7 +15,18 @@ export function Footer() {
       <div className="container-fh py-10">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <Logo size="md" variant="light" />
+            {/* Shield icon + HTML wordmark — font-body (Nunito Sans) supports Vietnamese */}
+            <div className="flex items-center gap-2.5">
+              <LogoMark size={38} />
+              <div className="flex flex-col leading-none select-none">
+                <span className="font-body text-[18px] font-black tracking-tight leading-none text-white">
+                  Ban<span className="text-brand-gold">Thắng</span><span className="text-white/45">.VN</span>
+                </span>
+                <span className="mt-1 font-body text-[8px] font-semibold uppercase tracking-[0.16em] text-white/35">
+                  Tin bóng đá · Mỗi ngày
+                </span>
+              </div>
+            </div>
             <p className="mt-3 max-w-xs text-sm text-white/60">{tSite('tagline')}</p>
           </div>
 
@@ -47,7 +58,7 @@ export function Footer() {
         </div>
 
         <div className="mt-8 flex flex-col gap-2 border-t border-white/10 pt-6 text-xs text-white/40 sm:flex-row sm:items-center sm:justify-between">
-          <span>© {year} BóngĐáHôm · {t('rights')}</span>
+          <span>© {year} BanThangVN · {t('rights')}</span>
           <div className="flex gap-4">
             <Link href="/gioi-thieu" className="hover:text-brand-gold transition-colors">{t('about')}</Link>
             <Link href="/lien-he" className="hover:text-brand-gold transition-colors">{t('contact')}</Link>
